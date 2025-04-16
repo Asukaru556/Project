@@ -1,7 +1,7 @@
 <script setup>
 import { useEventsStore } from '@/stores/MyStore'
 import { storeToRefs } from 'pinia'
-import EventList from '@/UI/EventList.vue'
+import EventList from '@/components/EventList.vue'
 
 const store = useEventsStore()
 const { events } = storeToRefs(store)

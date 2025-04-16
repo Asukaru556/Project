@@ -1,15 +1,15 @@
 <script setup>
 import { useEventsStore } from "@/stores/MyStore.js";
 import { storeToRefs } from 'pinia'
-import NewCard from "@/UI/NewCard.vue";
-import {ref} from "vue";
+import NewCard from "@/components/NewCard.vue";
+import { ref } from 'vue'
 
 const store = useEventsStore()
 const { events } = storeToRefs(store)
 const editingId = ref(null)
 
-const startEditing = (id) => {
-  editingId.value = id
+const startEditing = (event) => {
+  editingId.value = event.id
 }
 
 const saveEvent = (updatedEvent) => {
@@ -20,7 +20,6 @@ const saveEvent = (updatedEvent) => {
 const cancelEditing = () => {
   editingId.value = null
 }
-
 </script>
 
 <template>
@@ -30,7 +29,7 @@ const cancelEditing = () => {
         :key="event.id"
         :item="event"
         :is-editing="editingId === event.id"
-        @edit="startEditing(event.id)"
+        @edit="startEditing(event)"
         @save="saveEvent"
         @cancel="cancelEditing"
         @delete="store.deleteEvents"

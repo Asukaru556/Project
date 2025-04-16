@@ -2,7 +2,7 @@
 import { RouterLink, RouterView } from 'vue-router'
 import logo from '@/assets/logo.svg'
 import Navigation from '@/components/Navigation.vue'
-import EventList from "@/UI/EventList.vue";
+import EventList from "@/components/EventList.vue";
 import { ref } from 'vue'
 
 const menuLinks = ref([

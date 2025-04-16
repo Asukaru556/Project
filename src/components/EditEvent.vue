@@ -1,5 +1,7 @@
 <script setup>
-import {ref} from "vue";
+import BtnVue from "@/UI/BtnVue.vue";
+import MultiFields from "@/UI/MultiFields.vue";
+import { ref } from "vue";
 
 const props = defineProps({
   event: {
@@ -10,88 +12,56 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel']);
 
-const form = ref({ ...props.event })
+const form = ref({ ...props.event });
 
 const handleSave = () => {
-  emit('save', form.value)
-}
-
-const handleCancel = () => {
-  emit('cancel');
+  emit('save', form.value);
 };
-
 </script>
 
 <template>
-  <form @submit.prevent="handleSave" class="edit-form">
-    <div class="form-group">
-      <label>Время</label>
-      <input v-model="form.time" type="text" required>
-    </div>
+  <div class="edit-form">
+    <MultiFields
+        v-model="form.title"
+        label="Название"
+        rules="required"
+    />
 
-    <div class="form-group">
-      <label>Название</label>
-      <input v-model="form.title" type="text" required>
-    </div>
+    <MultiFields
+        v-model="form.time"
+        label="Время"
+        rules="required"
+    />
 
-    <div class="form-group">
-      <label>Описание</label>
-      <textarea v-model="form.description"></textarea>
-    </div>
+    <MultiFields
+        v-model="form.description"
+        label="Описание"
+        type="textarea"
+    />
 
     <div class="form-actions">
-      <button type="button" @click="handleCancel" class="cancel-btn">
+      <BtnVue type="cancel" @click="$emit('cancel')" class="mr">
         Отмена
-      </button>
-      <button type="submit" class="save-btn">
+      </BtnVue>
+      <BtnVue @click="handleSave">
         Сохранить
-      </button>
+      </BtnVue>
     </div>
-  </form>
+  </div>
 </template>
 
-<style>
-
+<style scoped>
 .edit-form {
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: white;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 15px 0;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
   margin-top: 20px;
 }
 
-.save-btn {
-  background: #4CAF50;
-  color: white;
+.mr {
+  margin-right: 10px;
 }
-
-.cancel-btn {
-  background: #f44336;
-  color: white;
-}
-
 </style>

@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 const emit = defineEmits(['update:modelValue'])
 
 const props = defineProps({

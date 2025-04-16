@@ -63,8 +63,6 @@ function clearForm() {
   <form>
     <MultiFields
       v-for="field in Form"
-      :id="field.id"
-      :key="field.id"
       v-model="field.model"
       :error="field.error"
       :label="field.label"
