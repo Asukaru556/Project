@@ -2,6 +2,7 @@
 import { useEventsStore } from '@/stores/MyStore'
 import { storeToRefs } from 'pinia'
 import EventList from '@/components/EventList.vue'
+import BtnVue from "@/UI/BtnVue.vue";
 
 const store = useEventsStore()
 const { events } = storeToRefs(store)
@@ -13,8 +14,8 @@ const { events } = storeToRefs(store)
   <div class="events-view">
     <div class="header">
       <h1>Список событий</h1>
-      <RouterLink to="/events/create" class="create-btn">
-        + Создать событие
+      <RouterLink to="/events/create" >
+        <BtnVue >+ Создать событие</BtnVue>
       </RouterLink>
     </div>
     <EventList :events="events" />
@@ -33,19 +34,6 @@ const { events } = storeToRefs(store)
   margin-bottom: 20px;
 }
 
-.create-btn {
-  background: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background 0.3s;
-}
 
-.create-btn:hover {
-  background: #388E3C;
-}
 </style>
 

@@ -37,7 +37,6 @@ const handleSave = (updatedEvent) => {
 
     <template v-slot:footer>
       <div class="actions">
-        <!-- Режим просмотра -->
         <template v-if="!isEditing">
           <BtnVue @click="$emit('edit')" class="mr">
             Изменить

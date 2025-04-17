@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useEventsStore } from "@/stores/MyStore.js";
+import BtnVue from "@/UI/BtnVue.vue";
 
 const store = useEventsStore()
 
@@ -52,8 +53,8 @@ const cancelCreate = () => {
       </div>
 
       <div class="form-actions">
-        <button type="button" @click="cancelCreate">Отмена</button>
-        <button type="submit" @click="handleSubmit">Сохранить</button>
+        <BtnVue type="button" @click="cancelCreate">Отмена</BtnVue>
+        <BtnVue type="submit" @click="handleSubmit">Сохранить</BtnVue>
       </div>
     </form>
   </div>
