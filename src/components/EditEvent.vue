@@ -12,31 +12,52 @@ const props = defineProps({
 
 const emit = defineEmits(['save', 'cancel']);
 
-const form = ref({ ...props.event });
+const formData = ref({
+  title: props.event.title,
+  time: props.event.time,
+  description: props.event.description,
+});
+
+const formFields = ref([
+  {
+    name: 'title',
+    label: 'Название',
+    type: 'text',
+    get model() { return formData.value.title; },
+    set model(value) { formData.value.title = value; }
+  },
+  {
+    name: 'time',
+    label: 'Время',
+    type: 'time',
+    get model() { return formData.value.time; },
+    set model(value) { formData.value.time = value; }
+  },
+  {
+    name: 'description',
+    label: 'Описание',
+    type: 'textarea',
+    get model() { return formData.value.description; },
+    set model(value) { formData.value.description = value; }
+  }
+]);
 
 const handleSave = () => {
-  emit('save', form.value);
+  emit('save', {
+    ...props.event,
+    ...formData.value
+  });
 };
 </script>
 
 <template>
   <div class="edit-form">
     <MultiFields
-        v-model="form.title"
-        label="Название"
-        rules="required"
-    />
-
-    <MultiFields
-        v-model="form.time"
-        label="Время"
-        rules="required"
-    />
-
-    <MultiFields
-        v-model="form.description"
-        label="Описание"
-        type="textarea"
+        v-for="field in formFields"
+        :key="field.name"
+        v-model="field.model"
+        :label="field.label"
+        :type="field.type"
     />
 
     <div class="form-actions">

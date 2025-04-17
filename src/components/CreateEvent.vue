@@ -1,26 +1,73 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import {ref, watch} from 'vue'
 import { useEventsStore } from "@/stores/MyStore.js";
 import BtnVue from "@/UI/BtnVue.vue";
-
-const store = useEventsStore()
-
-
-const form = ref({
-  title: '',
-  description: '',
-  time: ''
-})
+import MultiFields from "@/UI/MultiFields.vue";
+import { validation } from '@/js/validation.js'
 
 const router = useRouter()
+const store = useEventsStore()
+const isValid = ref(false)
+
+const Form = ref([
+  {
+    name: 'title',
+    label: 'Название',
+    type: 'text',
+    model: '',
+    rules: 'title',
+    placeholder: 'Введите название',
+    error: '',
+  },
+  {
+    name: 'time',
+    label: 'Время',
+    type: 'time',
+    model: '',
+    error: '',
+  },
+  {
+    name: 'description',
+    label: 'Описание',
+    type: 'textarea',
+    model: '',
+    placeholder: 'Введите описание',
+    error: '',
+  },
+  {
+    name: 'author',
+    label: 'Автор',
+    type: 'text',
+    model: '',
+    placeholder: 'Введите автора',
+    error: '',
+    rules: 'author',
+  },
+])
+
+watch(
+    Form,
+    () => {
+      const { data, valid } = validation(Form.value)
+      Form.value = data
+      isValid.value = valid
+    },
+    { deep: true },
+)
 
 const handleSubmit = async () => {
+  if (!isValid.value) return
   try {
-    await store.addEvent({
-      ...form.value,
+    const eventData = {
+      title: Form.value.find(f => f.name === 'title').model,
+      description: Form.value.find(f => f.name === 'description').model,
+      time: Form.value.find(f => f.name === 'time').model,
+      author: Form.value.find(f => f.name === 'author').model,
       id: Date.now()
-    })
+    }
+
+    await store.addEvent(eventData)
     router.push('/events')
   } catch (error) {
     console.error('Ошибка сохранения:', error)
@@ -34,31 +81,42 @@ const cancelCreate = () => {
 </script>
 
 <template>
-  <div class="event-form">
-    <h2>Новое событие</h2>
-    <form @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label>Время</label>
-        <input type="time" v-model="form.time">
-      </div>
+  <div class="form-wrapper">
+    <h2 class="form-title">Новое событие</h2>
 
-      <div class="form-group">
-        <label>Название</label>
-        <input v-model="form.title" required>
-      </div>
+    <form @submit.prevent="handleSubmit" class="event-form">
+      <MultiFields
+          v-for="field in Form"
+          :key="field.name"
+          :label="field.label"
+          v-model="field.model"
+          :placeholder="field.placeholder"
+          :type="field.type"
+          :is-textarea="field.type === 'textarea'"
+          :rules="field.rules"
+          :error="field.error"
+      />
 
-      <div class="form-group">
-        <label>Описание</label>
-        <textarea v-model="form.description"></textarea>
-      </div>
-
-      <div class="form-actions">
-        <BtnVue type="button" @click="cancelCreate">Отмена</BtnVue>
-        <BtnVue type="submit" @click="handleSubmit">Сохранить</BtnVue>
+      <div class="action-buttons">
+        <BtnVue
+            type="button"
+            @click="cancelCreate"
+            class="cancel-btn"
+        >
+          Отмена
+        </BtnVue>
+        <BtnVue
+            type="submit"
+            :disabled="!isValid"
+            class="submit-btn"
+        >
+          Сохранить
+        </BtnVue>
       </div>
     </form>
   </div>
 </template>
+
 
 <style scoped>
 .event-form {
@@ -67,10 +125,6 @@ const cancelCreate = () => {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   margin-top: 20px;
-}
-
-.form-group {
-  margin-bottom: 15px;
 }
 
 .form-group label {
@@ -85,13 +139,6 @@ const cancelCreate = () => {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
 }
 
 </style>

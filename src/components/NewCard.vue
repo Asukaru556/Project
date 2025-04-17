@@ -26,7 +26,8 @@ const handleSave = (updatedEvent) => {
       </template>
     </template>
 
-    <div v-if="!isEditing">{{ item.description }}</div>
+    <div v-if="!isEditing" class="descr">{{ item.description }}</div>
+    <div v-if="!isEditing">Автор: {{ item.author }}</div>
 
     <EditEvent
         v-if="isEditing"
@@ -62,5 +63,9 @@ const handleSave = (updatedEvent) => {
 .actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.descr{
+  margin-bottom: 20px;
 }
 </style>

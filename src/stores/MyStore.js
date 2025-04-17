@@ -8,30 +8,35 @@ export const useEventsStore = defineStore('events', () => {
       title: 'Самолет',
       description: 'Самолет в Дубай',
       time: '18:00',
+      author: 'Askar',
     },
     {
       id: 2,
       title: 'Магазин',
       description: 'Купить одежду',
       time: '13:00',
+      author: 'Askar',
     },
     {
       id: 3,
       title: 'Концерт',
       description: 'Сходить на концерт КиШ',
       time: '20:00',
+      author: 'Askar',
     },
     {
       id: 4,
       title: 'Спортзал',
       description: 'Сходить в спортзал',
       time: '9:00',
+      author: 'Askar',
     },
     {
       id: 5,
       title: 'Кафе',
       description: 'Сходить в кафе',
       time: '12:00',
+      author: 'Askar',
     },
   ])
   function deleteEvents(id) {
