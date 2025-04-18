@@ -6,7 +6,6 @@ const props = defineProps({
     type: String,
     required: false,
     default: 'text',
-    validator: (value) => ['text', 'password', 'email', 'textarea'].includes(value),
   },
   label: {
     type: String,
@@ -28,6 +27,10 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  options: {
+    type: Array,
+    required: false,
+  },
 })
 
 function updateValue(event) {
@@ -41,7 +44,7 @@ function updateValue(event) {
       {{ props.label }}
     </div>
     <input
-        v-if="props.type !== 'textarea'"
+        v-if="['text', 'password', 'email'].includes(props.type)"
         :placeholder="props.placeholder"
         :type="props.type"
         :value="props.modelValue"
@@ -50,12 +53,26 @@ function updateValue(event) {
     />
 
     <textarea
-        v-else
+        v-else-if="props.type === 'textarea'"
         :placeholder="props.placeholder"
         :value="props.modelValue"
         class="input textarea"
         @input="updateValue"
     />
+
+    <select
+        v-else-if="props.type === 'select'"
+        :value="props.modelValue"
+        class="input"
+        @change="updateValue"
+    >
+      <option
+          v-for="option in props.options"
+          :value="option.value"
+      >
+        {{ option.text }}
+      </option>
+    </select>
 
     <div v-if="props.error" class="error">{{ props.error }}</div>
   </div>

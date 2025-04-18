@@ -45,6 +45,17 @@ const Form = ref([
     error: '',
     rules: 'confirm',
   },
+  {
+    id: 4,
+    name: 'gender',
+    label: 'Выберите пол',
+    type: 'select',
+    model: '',
+    options: [
+      { value: 'male', text: 'Мужчина' },
+      { value: 'female', text: 'Женщина' }
+    ],
+  },
 ])
 
 const isValid = ref(false)
@@ -89,7 +100,6 @@ function clearForm() {
 
 <template>
   <form>
-    {{ isConfirm }}
     <MultiFields
       v-for="field in Form"
       v-model="field.model"
@@ -98,8 +108,8 @@ function clearForm() {
       :placeholder="field.placeholder"
       :rules="field.rules"
       :type="field.type"
+      :options="field.options"
     />
-    {{ isValid }}
     <div class="actions">
       <BtnVue :disabled="!isValid" class="mr" @click.prevent="setLogin">Создать</BtnVue>
       <BtnVue :type="'cancel'" @click.prevent="clearForm">Сбросить</BtnVue>
