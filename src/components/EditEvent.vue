@@ -1,6 +1,6 @@
 <script setup>
 import BtnVue from "@/UI/BtnVue.vue";
-import MultiFields from "@/UI/MultiFields.vue";
+import MultiFields from "@/components/MultiFields.vue";
 import { ref } from "vue";
 
 const props = defineProps({

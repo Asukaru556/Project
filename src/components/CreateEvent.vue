@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import {ref, watch} from 'vue'
 import { useEventsStore } from "@/stores/MyStore.js";
 import BtnVue from "@/UI/BtnVue.vue";
-import MultiFields from "@/UI/MultiFields.vue";
+import MultiFields from "@/components/MultiFields.vue";
 import { validation } from '@/js/validation.js'
 
 const router = useRouter()

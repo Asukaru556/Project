@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
-import MultiFields from '@/UI/MultiFields.vue'
+import MultiFields from '@/components/MultiFields.vue'
 import BtnVue from '@/UI/BtnVue.vue'
 import { validation } from '@/js/validation.js'
 
