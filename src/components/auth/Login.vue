@@ -3,15 +3,19 @@ import { ref, watch } from 'vue'
 import MultiFields from '@/components/MultiFields.vue'
 import BtnVue from '@/UI/BtnVue.vue'
 import { validation } from '@/js/validation.js'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/fireBase/fireBase.js'
+import { useRouter } from 'vue-router'
+import { useAuth } from '@/composables/useAuth'
 
 const Form = ref([
   {
-    name: 'login',
-    label: 'Логин',
+    name: 'Email',
+    label: 'Почта',
     type: 'text',
     model: '',
     rules: 'email',
-    placeholder: 'Введите логин',
+    placeholder: 'Введите email',
     error: '',
   },
   {
@@ -25,18 +29,36 @@ const Form = ref([
   },
 ])
 
+const { user } = useAuth()
+const router = useRouter()
 const isValid = ref(false)
 
-function setLogin() {
-  if (!isValid.value) return
-  const loginData = Form.value.map((el) => {
-    return {
-      id: el.id,
-      name: el.name,
-      password: el.model,
+watch(user, (newUser) => {
+  if (newUser) {
+    router.push('/')
+  }
+})
+
+async function loginUser() {
+  if (!isValid.value) return;
+
+  try {
+    const email = Form.value[0].model.trim();
+    const password = Form.value[1].model.trim();
+
+    console.log("Попытка входа с:", { email, password });
+
+    await signInWithEmailAndPassword(auth, email, password);
+    router.push('/');
+  } catch (error) {
+    console.error("Код ошибки:", error.code);
+
+    if (error.code === 'auth/invalid-credential') {
+      alert('Неверный email или пароль');
+    } else {
+      Form.value[0].error = 'Ошибка: ' + error.message;
     }
-  })
-  console.log('loginData', loginData)
+  }
 }
 
 watch(
@@ -45,6 +67,7 @@ watch(
     const { data, valid } = validation(Form.value)
     Form.value = data
     isValid.value = valid
+    console.log('Form valid:', valid)
   },
   { deep: true },
 )
@@ -70,9 +93,10 @@ function clearForm() {
       :rules="field.rules"
       :type="field.type"
     />
-    {{ isValid }}
     <div class="actions">
-      <BtnVue :disabled="!isValid" class="mr" @click.prevent="setLogin">Войти</BtnVue>
+      <BtnVue :disabled="!isValid" class="mr" @click.prevent="loginUser">
+        Войти
+      </BtnVue>
       <BtnVue :type="'cancel'" @click.prevent="clearForm">Сбросить</BtnVue>
     </div>
   </form>

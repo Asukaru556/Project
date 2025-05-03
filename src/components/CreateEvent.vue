@@ -1,11 +1,13 @@
 <script setup>
 import { useRouter } from 'vue-router'
-import {ref, watch} from 'vue'
+import {ref, watch, computed} from 'vue'
 import { useEventsStore } from "@/stores/MyStore.js";
 import BtnVue from "@/UI/BtnVue.vue";
 import MultiFields from "@/components/MultiFields.vue";
 import { validation } from '@/js/validation.js'
+import { useAuth } from '@/composables/useAuth'
 
+const { userLogin } = useAuth()
 const router = useRouter()
 const store = useEventsStore()
 const isValid = ref(false)
@@ -35,15 +37,6 @@ const Form = ref([
     placeholder: 'Введите описание',
     error: '',
   },
-  {
-    name: 'author',
-    label: 'Автор',
-    type: 'text',
-    model: '',
-    placeholder: 'Введите автора',
-    error: '',
-    rules: 'author',
-  },
 ])
 
 watch(
@@ -63,7 +56,7 @@ const handleSubmit = async () => {
       title: Form.value.find(f => f.name === 'title').model,
       description: Form.value.find(f => f.name === 'description').model,
       time: Form.value.find(f => f.name === 'time').model,
-      author: Form.value.find(f => f.name === 'author').model,
+      author: userLogin.value,
       id: Date.now()
     }
 
@@ -96,6 +89,11 @@ const cancelCreate = () => {
           :rules="field.rules"
           :error="field.error"
       />
+
+      <div class="author">
+        <label>Автор:</label>
+        <span class="author-name">{{ userLogin }}</span>
+      </div>
 
       <div class="action-buttons">
         <BtnVue
@@ -141,4 +139,7 @@ const cancelCreate = () => {
   border-radius: 4px;
 }
 
+.author {
+  margin-bottom: 10px;
+}
 </style>

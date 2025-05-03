@@ -2,6 +2,9 @@
 import Card from "@/UI/Card.vue";
 import BtnVue from "@/UI/BtnVue.vue";
 import EditEvent from "@/components/EditEvent.vue";
+import { useAuth } from '@/composables/useAuth';
+
+const { isAuthenticated } = useAuth();
 
 const props = defineProps({
   item: {
@@ -39,10 +42,14 @@ const handleSave = (updatedEvent) => {
     <template v-slot:footer>
       <div class="actions">
         <template v-if="!isEditing">
-          <BtnVue @click="$emit('edit')" class="mr">
+          <BtnVue
+              v-if="isAuthenticated"
+              @click="$emit('edit')"
+              class="mr">
             Изменить
           </BtnVue>
           <BtnVue
+              v-if="isAuthenticated"
               type="cancel"
               @click="$emit('delete', item.id)"
           >

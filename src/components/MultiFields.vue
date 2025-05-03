@@ -64,8 +64,7 @@ onMounted(() => {
   }
 
   if (typeof props.options[0] === 'string') {
-    normalizedOptions.value = props.options.map((item, index) => ({
-      [props.viewValue]: index,
+    normalizedOptions.value = props.options.map((item) => ({
       [props.viewLabel]: item
     }))
   }
@@ -85,7 +84,6 @@ function selectOption(option) {
 }
 
 function handleBlur() {
-  if (ignoreBlur.value) return
   setTimeout(() => {
     isOpen.value = false
     if (props.modelValue && props.options) {
@@ -110,7 +108,7 @@ function updateValue(event) {
       {{ props.label }}
     </div>
     <input
-        v-if="['text', 'password', 'email'].includes(props.type)"
+        v-if="['text', 'password', 'email', 'time'].includes(props.type)"
         :placeholder="props.placeholder"
         :type="props.type"
         :value="props.modelValue"
@@ -177,7 +175,7 @@ function updateValue(event) {
 }
 
 .input {
-  width: 250px;
+  width: 100%;
   margin: 5px 0;
   padding: 5px 10px;
   border-radius: 0;

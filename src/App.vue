@@ -2,21 +2,29 @@
 import { RouterLink, RouterView } from 'vue-router'
 import logo from '@/assets/logo.svg'
 import Navigation from '@/components/Navigation.vue'
-import EventList from "@/components/EventList.vue";
-import { ref } from 'vue'
+import { useAuth } from '@/composables/useAuth'
+import BtnVue from "@/UI/BtnVue.vue";
+import { computed } from 'vue'
+import {signOut} from "firebase/auth";
+import {auth} from "@/fireBase/fireBase.js";
+const { isAuthenticated, userLogin } = useAuth()
 
-const menuLinks = ref([
-  {
-    id: 0,
-    url: '/login',
-    label: 'Логин',
-  },
-  {
-    id: 1,
-    url: '/register',
-    label: 'Регистрация',
-  },
-])
+const menuLinks = computed(() => {
+  if (isAuthenticated.value) return []
+  return [
+    { id: 0, url: '/login', label: 'Логин' },
+    { id: 1, url: '/register', label: 'Регистрация' }
+  ]
+})
+
+async function handleLogout() {
+  try {
+    await signOut(auth)
+    router.push('/login')
+  } catch (error) {
+    console.error('Logout error:', error)
+  }
+}
 </script>
 
 <template>
@@ -25,6 +33,10 @@ const menuLinks = ref([
       <img :src="logo" :width="60" />
     </RouterLink>
     <Navigation :items="menuLinks" />
+    <div v-if="isAuthenticated">
+      Привет, {{ userLogin }}
+      <BtnVue @click="handleLogout">Выйти</BtnVue>
+    </div>
   </header>
 
   <div class="wrap">

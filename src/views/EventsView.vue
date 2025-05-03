@@ -3,11 +3,11 @@ import { useEventsStore } from '@/stores/MyStore'
 import { storeToRefs } from 'pinia'
 import EventList from '@/components/EventList.vue'
 import BtnVue from "@/UI/BtnVue.vue";
+import { useAuth } from '@/composables/useAuth';
 
+const { isAuthenticated } = useAuth();
 const store = useEventsStore()
 const { events } = storeToRefs(store)
-
-
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const { events } = storeToRefs(store)
     <div class="header">
       <h1>Список событий</h1>
       <RouterLink to="/events/create" >
-        <BtnVue >+ Создать событие</BtnVue>
+        <BtnVue v-if="isAuthenticated">+ Создать событие</BtnVue>
       </RouterLink>
     </div>
     <EventList :events="events" />
