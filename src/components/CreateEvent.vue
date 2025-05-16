@@ -49,23 +49,25 @@ watch(
     { deep: true },
 )
 
+
 const handleSubmit = async () => {
-  if (!isValid.value) return
+  if (!isValid.value) return;
   try {
     const eventData = {
       title: Form.value.find(f => f.name === 'title').model,
       description: Form.value.find(f => f.name === 'description').model,
-      time: Form.value.find(f => f.name === 'time').model,
-      author: userLogin.value,
-      id: Date.now()
-    }
+      time: Form.value.find(f => f.name === 'time').model.replace(/:/g, ''), // Формат HHmm
+      author: userLogin.value
+    };
 
-    await store.addEvent(eventData)
-    router.push('/events')
+    await store.addEvent(eventData);
+    router.push('/events');
   } catch (error) {
-    console.error('Ошибка сохранения:', error)
+    console.error('Ошибка сохранения:', error);
+    alert(error.message);
   }
-}
+};
+
 
 const cancelCreate = () => {
   router.push('/events')

@@ -43,6 +43,10 @@ const props = defineProps({
     required: false,
     default: 'value'
   },
+  accept: {
+    type: String,
+    default: ''
+  },
 })
 
 const normalizedOptions = ref([])
@@ -98,7 +102,11 @@ function handleBlur() {
 }
 
 function updateValue(event) {
-  emit('update:modelValue', event.target.value)
+  if (props.type === 'file') {
+    emit('update:modelValue', event.target.files[0])
+  } else {
+    emit('update:modelValue', event.target.value)
+  }
 }
 </script>
 
@@ -122,6 +130,14 @@ function updateValue(event) {
         :value="props.modelValue"
         class="input textarea"
         @input="updateValue"
+    />
+
+    <input
+      v-else-if="props.type === 'file'"
+      :type="props.type"
+      :accept="props.accept"
+      @change="updateValue"
+      class="input"
     />
 
     <select

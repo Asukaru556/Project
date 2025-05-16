@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import logo from '@/assets/logo.svg'
+import logo from '@/assets/logo.png'
 import Navigation from '@/components/Navigation.vue'
 import { useAuth } from '@/composables/useAuth'
 import BtnVue from "@/UI/BtnVue.vue";
@@ -30,7 +30,7 @@ async function handleLogout() {
 <template>
   <header>
     <RouterLink to="/">
-      <img :src="logo" :width="60" />
+      <img :src="logo" :width="90" />
     </RouterLink>
     <Navigation :items="menuLinks" />
     <div v-if="isAuthenticated">
@@ -130,5 +130,15 @@ content {
   outline: 2px solid #3c3e67;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+header img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 100px;
+}
+
+header img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 </style>

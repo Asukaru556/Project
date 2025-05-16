@@ -23,17 +23,23 @@ const { events } = storeToRefs(store)
 </template>
 
 <style scoped>
+
 .events-view {
   padding: 20px;
 }
 
 .header {
+  width: 1000px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* Изменяем на flex-start */
   align-items: center;
+  gap: 20px; /* Добавляем промежуток между элементами */
   margin-bottom: 20px;
 }
 
+.header h1 {
+  margin-right: auto; /* Заголовок будет прижиматься к левому краю */
+}
 
 </style>
 
